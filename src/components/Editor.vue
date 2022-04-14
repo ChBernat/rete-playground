@@ -90,15 +90,14 @@ export default {
     editor.use(ConnectionPlugin);
     editor.use(VueRenderPlugin);
     editor.use(ContextMenuPlugin);
-    editor.use(AreaPlugin);
+    editor.use(AreaPlugin, { snap: { size: 16, dynamic: true }, background: true });
     editor.use(ConnectionPathPlugin, {
-      type: ConnectionPathPlugin.DEFAULT, // DEFAULT or LINEAR transformer
-      transformer: () => ([x1, y1, x2, y2]) => [[x1, y1], [x2, y2]], // optional, custom transformer
-      curve: ConnectionPathPlugin.curveBundle, // curve identifier
-      options: { vertical: false, curvature: 0.4 }, // optional
+      type: ConnectionPathPlugin.DEFAULT, 
+      transformer: () => ([x1, y1, x2, y2]) => [[x1, y1], [x2, y2]], 
+      curve: ConnectionPathPlugin.curveBundle,
+      options: { vertical: false, curvature: 0.4 },
       arrow: { color: 'steelblue', marker: 'M-5,-10 L-5,10 L20,0 z' }
     });
-console.log(ConnectionPathPlugin)
      let position = 0; 
     editor.on('renderconnection', ({ el }) => {
         const path = el.querySelector('path');
@@ -147,7 +146,6 @@ console.log(ConnectionPathPlugin)
 
 
     editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
-      console.log('process');
         await engine.abort();
         await engine.process(editor.toJSON());
     });
